@@ -28,9 +28,6 @@ matrix_t modul_expon(int n, int b, matrix_t V){
     else if(b==2){
         return mat_mul(n, V, V);
     }
-    else if(b==3){
-        return mat_mul(n,  V, modul_expon(n, 2, V));
-    }
     else if(b%2){//b가 홀수
     //V*(V의 b/2 거듭제곱)*(V의 b/2 거듭제곱)
         return mat_mul(n, V, modul_expon(n, b-1, V));
