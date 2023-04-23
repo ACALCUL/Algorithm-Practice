@@ -37,10 +37,10 @@ void dijkstra(int n, matrix_t &W, set_of_edges& F, vector<int> &touch, vector<in
                 vnear=i;
             }
         F.push_back(make_pair(vnear, touch[vnear]));
-        for(int i=2; i<=n; i++){
-            if(length[i] > length[vnear]+W[i][vnear]){
+        for(int i=2; i<=n; i++){//
+            if(length[i] > length[vnear]+W[vnear][i]){
                 //prim과 다른 건 length만 넣는 대신 length+W를 한다는 점
-                length[i] = length[vnear]+W[i][vnear];
+                length[i] = length[vnear]+W[vnear][i];
                 touch[i]=vnear;
             }
         }
@@ -70,6 +70,15 @@ void print_path(int dest, vector<int> touch){
     cout << endl;
 }
 
+void print_matrix(int m, int n, matrix_t& A){
+    for(int i=0; i<=m; i++){
+        for(int j=0; j<=n; j++){
+            cout << A[i][j]<<" ";
+        }
+        cout<<endl;
+    }
+}
+
 int main(){
     set_of_edges F;
 
@@ -84,7 +93,6 @@ int main(){
     for(int i=0; i<m; i++){
         cin >> u>>v>>w;
         W[u][v]=w;
-        W[v][u]=w;
     }
 
     int t;
@@ -94,14 +102,15 @@ int main(){
         cin >> T[i];
     }
 
+    //print_matrix(n, n, W);
+
     vector<int> touch(n+1, 0), length(n+1, 0);
 
     dijkstra(n, W, F, touch, length);
     for(edge_t e: F){
         int u=e.first; 
         int v=e.second;
-        cout << v << " "<< u << " "<<W[u][v]<<endl;
-        //문제 조건에 의해 v, u print 순서 바꿈
+        cout <<v << " "<< u << " "<<W[v][u]<<endl;
     }
 
     for(int i=0; i<t; i++ ){
