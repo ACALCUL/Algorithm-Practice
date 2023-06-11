@@ -28,6 +28,8 @@ int knapsack3(int n, int W, vector<int> w, vector<int> p, map<pair<int, int>, in
     int lvalue=(P.find(make_pair(n-1,W)) != P.end())
                 ?P[make_pair(n-1, W)]
                 :knapsack3(n-1, W, w, p, P);
+    //find함수는 키의 값을 반환해주는데, 키가 map에 존재하지 않을 시 P.end를 출력함
+    //만약 키가 있으면 키의 값을 반환하고, 키가 없으면 키를 만든다.
     int rvalue=(P.find(make_pair(n-1, W-w[n]))!=P.end())
                 ?P[make_pair(n-1, W-w[n])]
                 :knapsack3(n-1, W-w[n], w, p, P);
