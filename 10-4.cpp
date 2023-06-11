@@ -45,7 +45,7 @@ void hamiltonian(int i){
 int main(){
     cin>>n;
     vindex.resize(n);
-    //vindex는 0~n-1이고(또한 n과 0은 겹침), 노드 이름은 1~n이다.
+    //vindex의 인덱스는 0~n-1이고(또한 n은 0과 값이 겹치므로 제외), 이에 들어올 수 있는 값(노드)은 1~n이다.
     W.resize(n+1, vector<bool>(n+1));
 
     int m;
