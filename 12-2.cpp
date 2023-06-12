@@ -3,7 +3,7 @@
 #include <math.h>
 using namespace std;
 
-const int INF = 0x7ffffff;
+const int INF = 0x7fffffff;
 //int는 4byte=32bits
 //7은 0111 따라서 INF는 int형의 최댓값
 typedef vector<vector<int>> matrix_t;
@@ -52,7 +52,7 @@ void travel(int n, matrix_t& W, matrix_t& D, matrix_t& P, int &minlength){
 
     int subset_size=pow(2, n-1);//A의 최댓값
     for(i=2; i<=n; i++)
-    //A=0(공집합)일때는 D가 시작점 i와 끝점 1의 거리
+        //A=0(공집합)일때는 D가 시작점 i와 끝점 1의 거리
         D[i][0]=W[i][1];
     for(k=1; k<=n-2; k++)
     //k는 A집합의 vertex 개수
