@@ -64,17 +64,19 @@ bool hasIncoming(int v, ordered_set path){
     return false;
 }
 
-//bound: v의 loverbound(미래에 path에 vertex가 추가로 붙을 때의 length 최솟값) 리턴
+//bound: v의 lowerbound(미래에 path에 vertex가 추가로 붙을 때의 length 최솟값) 리턴
 int bound(node_pointer v){
     int lower=length(v->path);//기존에 가지고 있던 path의 length가 기본
     for(int i=1; i<=n ; i++){//추가할 W의 첫번째 인자
         if(hasOutgoing(i, v->path)) continue;
+        //path의 마지막 vertex를 제외한 path의 모든 vertex는 제외
         int min=INF;
         for(int j=1; j<=n; j++){//추가할 W의 두번째 인자
             //Don't include self-loop
             if(i==j) continue;
+            //j=1일 때 i가 path의 마지막 vertex면 뛰어넘기
             if(j==1 && i==v->path[v->path.size()-1]) continue;
-            //첫번째 vertex말고 path에 있으면 뛰어넘기
+            //첫번째 vertex말고 path에 j가 있으면 뛰어넘기
             if(hasIncoming(j, v->path)) continue;
             //min값 갱신
             if(min > W[i][j]) min=W[i][j];
@@ -103,6 +105,7 @@ bool isIn(int v, ordered_set path){
     return false;
 }
 
+//모든 vertex중 아직 path에 들어가지 않은 나머지 하나의 vertex를 찾는 함수
 int remaining_vertex(ordered_set path){
     for(int i=2; i<=n; i++){
         if(!isIn(i, path)){
@@ -113,12 +116,14 @@ int remaining_vertex(ordered_set path){
     return 0;
 }
 
+//노드 u에 대하여 level bound path[0] path[1] ...... path[k]를 출력
 void print_node(node_pointer u){
     cout<<u->level<<" ";
     if(u->bound<0x0000ffff)
             cout<<u->bound;
         else
             cout<<"INF";
+    //bound는 특정값을 넘길 시 INF로 출력
     for(int i: u->path){
         cout<<" "<<i;
     }
@@ -137,7 +142,8 @@ void travel2(ordered_set &opttour, int& minlength){
     //level 0으로 시작, 1은 기본적으로 path에 들어감
     PQ.push(v);
 
-    print_node(v);//출력 1
+    //모든 방문한 노드 출력 1
+    print_node(v);
 
 
     while(!PQ.empty()){//PQ.empty가 종료 조건
@@ -153,7 +159,8 @@ void travel2(ordered_set &opttour, int& minlength){
                     u->bound=bound(u);
                     u->path.push_back(remaining_vertex(u->path));
                     u->path.push_back(1);
-                    print_node(u);//출력2
+                    //모든 방문한 노드 출력2
+                    print_node(u);
                     if(length(u->path) < minlength){//minlength 결정
                         minlength = length(u->path);
                         copy(u->path.begin(), u->path.end(), opttour.begin());
@@ -161,7 +168,8 @@ void travel2(ordered_set &opttour, int& minlength){
                 }
                 else{
                     u->bound=bound(u);
-                    print_node(u);//출력3
+                    //모든 방문한 노드 출력3
+                    print_node(u);
                     if(u->bound < minlength){//u가 유망하면
                         PQ.push(u);
                     }
@@ -188,6 +196,7 @@ int main(){
     
     int minlength;
     ordered_set opttour(n+1);//최적의 tour를 담는 vector
+    //크기가 n+1인 이유: vertex개수가 n개지만 마지막하고 첫번째 vertex는 중복이므로
     travel2(opttour, minlength);
     cout<<minlength<<endl;
 
